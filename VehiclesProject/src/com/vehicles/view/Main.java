@@ -1,4 +1,4 @@
-package com.vehicules.view;
+package com.vehicles.view;
 
 import java.util.ArrayList;
 import java.util.List;
