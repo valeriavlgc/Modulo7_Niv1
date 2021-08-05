@@ -15,4 +15,6 @@ public abstract class Vehicle {
 		this.brand = brand;
 		this.color = color;
 	}
+	
+	 	
 }

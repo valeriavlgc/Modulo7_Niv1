@@ -9,7 +9,7 @@ public class Car extends Vehicle {
 	}
 
 	public void addWheels(List<Wheel> frontWheels, List<Wheel> backWheels) throws Exception {
-		addTwoWheels(frontWheels);
+		addTwoWheels(frontWheels); 
 		addTwoWheels(backWheels);
 	}
 
@@ -23,8 +23,30 @@ public class Car extends Vehicle {
 		if (!rightWheel.equals(leftWheel))
 			throw new Exception();
 
-		this.wheels.add(leftWheel);
+		this.wheels.add(leftWheel); 
 		this.wheels.add(rightWheel);
 	}
 
+   public void getFrontWheels() {
+	   
+	  System.out.println(super.wheels.get(0));
+	  System.out.println(super.wheels.get(1));
+	   
+   }	
+   
+   public void getBackWheels() {
+	  System.out.println(super.wheels.get(2));
+	  System.out.println(super.wheels.get(3));
+   }
+	
+
+	@Override
+	public String toString() {
+		return "Car [plate=" + plate + ", brand=" + brand + ", color=" + color +
+				", [FrontWheels, R=" + wheels.get(0) + ", L=" + wheels.get(1) +
+				"] [BackWheels R=" + wheels.get(2) + ", L=" + wheels.get(3) + "]";
+	}
+
+	
+	
 }
