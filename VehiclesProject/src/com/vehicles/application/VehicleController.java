@@ -3,26 +3,36 @@ package com.vehicles.application;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
 import com.vehicles.project.Bike;
 import com.vehicles.project.Car;
+import com.vehicles.project.Driver;
+import com.vehicles.project.Owner;
+import com.vehicles.project.Truck;
 import com.vehicles.project.Vehicle;
 import com.vehicles.project.Wheel;
+import com.vehicles.project.License;
 
 public class VehicleController {
 
 	private static List<Vehicle> vehicles =new ArrayList<Vehicle>();
 	
-	public static void newVehicle() {
+	public static void newVehicle(Owner owner) throws Exception {
 		Scanner sc = new Scanner(System.in);
-		String plate, brand, color;
-		String tipo;
-		int i, counterDig = 0, counterLetter = 0;
+		UserController usController = new UserController();
+		String plate, brand, color, tipo, answer;
+		char type;
+     	int i, counterDig = 0, counterLetter = 0;
 		boolean end = true;
 		
-		System.out.println("Qué tipo de vehiculo desea crear (coche/moto)");
-	    tipo = sc.nextLine();
+		type = (owner.getLicense()).getType();
 		
+		
+		System.out.println("Qué tipo de vehiculo desea crear (coche/moto/camión");
+	    tipo = sc.nextLine();
+        
+	    
+	    owner.checkLicense(type, tipo);
+	    
 		do {
 			System.out.println("Por favor, introduzca la matricula");
 			plate = sc.nextLine();
@@ -42,11 +52,11 @@ public class VehicleController {
 				end = false;
 				System.out.println("Una matrícula debe llevar 4 letras y un mínimo de 2 dígitos.");
 			} else {
+				
 				end = true;
 			}
-			  
 			  counterDig = 0; counterLetter = 0;
-
+			  
 			} while (!end);
 		
 		
@@ -55,16 +65,29 @@ public class VehicleController {
 			System.out.println("Introduzca el color");
 			color = sc.nextLine();
 			
+			System.out.println("¿El titular del coche es el conductor?");
+			answer = sc.nextLine();
+			if (answer.equalsIgnoreCase("no")) {
+				Driver driver = usController.createDriver();
+				type = (driver.getLicense()).getType();
+				driver.checkLicense(type, tipo);
+			}
+			
 			
 			if (tipo.equalsIgnoreCase("coche")) {
 				createCar(plate, brand, color);
 		    	
+		    } else if (tipo.equalsIgnoreCase("camion")) {
+		    	createTruck(plate, brand, color);
+		    	
 		    } else if (tipo.equalsIgnoreCase("moto")) {
 		    	createBike(plate, brand, color);
 		    }
+			
+			
+		
 	
 		}	
-	
 	
 	public static void createCar(String plate, String brand, String color) {
 		String tipo = "car";
@@ -91,6 +114,29 @@ public class VehicleController {
 		
 	}
 	
+	public static void createTruck(String plate, String brand, String color) {
+        String tipo = "camion";
+		
+		Truck truck1 = new Truck(plate, brand, color);
+				
+		System.out.println("Información de ruedas delanteras:");
+		List<Wheel> frontWheels = new ArrayList<Wheel>();
+		frontWheels = WheelsInformation(tipo);
+		
+		System.out.println("Información de ruedas traseras:");
+		List<Wheel> backWheels = new ArrayList<Wheel>();
+		backWheels = WheelsInformation(tipo);
+		
+		try {
+		truck1.addWheels(frontWheels, backWheels);
+	    } catch (Exception e) {
+		e.printStackTrace();
+	    }
+		
+		
+		vehicles.add(truck1);
+	}
+	
 	public static void createBike(String plate, String brand, String color) {
 		String tipo = "bike";
 		
@@ -111,7 +157,6 @@ public class VehicleController {
 		vehicles.add(bike1);
 		
 	}
-	
 	
 	public static List<Wheel> WheelsInformation(String tipo) {
 		Scanner sc = new Scanner(System.in);
@@ -136,7 +181,7 @@ public class VehicleController {
 			
 				setWheels.add(newWheel); 
 				
-		} else if (tipo.equalsIgnoreCase("car")) {
+		} else if (tipo.equalsIgnoreCase("car") || tipo.equalsIgnoreCase("camion") ) {
 			
 		    setWheels.add(newWheel); 
 			setWheels.add(newWheel);
@@ -145,12 +190,11 @@ public class VehicleController {
 			return setWheels;
 		}	
 
-
-public void getAllVehicles() {
+    public void getAllVehicles() {
 	
-	for (Vehicle e : vehicles) {
-		System.out.println(e.toString());
-	}
-}
+		for (Vehicle e : vehicles) {
+			System.out.println(e.toString());
+		}
+    }
 	
 }
